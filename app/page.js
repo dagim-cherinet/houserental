@@ -1,53 +1,74 @@
 // app/page.js
-import {
-  Typography,
-  Container,
-  Box,
-  TextField,
-  Button,
-  Grid,
-  Paper,
-} from "@mui/material";
+"use client"; // Make entire page client-side for simplicity
+import { useState } from "react";
+import { Typography, Container, Box, Grid } from "@mui/material";
 import Header from "../components/Header";
+import Footer from "@/components/Footer";
+import SearchBar from "../components/SearchBar";
 import PropertyCard from "../components/PropertyCards";
 
-// Mock data
-async function getProperties() {
-  await new Promise((resolve) => setTimeout(resolve, 500));
-  return [
-    {
-      id: 1,
-      title: "Cozy Downtown Loft",
-      price: "$500/month",
-      location: "Addis Ababa, Ethiopia",
-      image: "/house1.jpg",
-    },
-    {
-      id: 2,
-      title: "Modern Villa Retreat",
-      price: "$1200/month",
-      location: "Bahir Dar, Ethiopia",
-      image: "/house2.jpg",
-    },
-    {
-      id: 3,
-      title: "Spacious Family Getaway",
-      price: "$800/month",
-      location: "Hawassa, Ethiopia",
-      image: "/house3.jpg",
-    },
-    {
-      id: 4,
-      title: "Charming Studio Flat",
-      price: "$450/month",
-      location: "Adama, Ethiopia",
-      image: "/house4.jpg",
-    },
-  ];
-}
+// Mock data (could be fetched server-side initially)
+const initialProperties = [
+  {
+    id: 1,
+    title: "Cozy Downtown Loft",
+    price: "$500/month",
+    location: "Downtown",
+    city: "Addis Ababa",
+    size: "1 bedroom",
+    image: "/house1.jpg",
+  },
+  {
+    id: 2,
+    title: "Modern Villa Retreat",
+    price: "$1200/month",
+    location: "Lakeside",
+    city: "Bahir Dar",
+    size: "3+ bedrooms",
+    image: "/house2.jpg",
+  },
+  {
+    id: 3,
+    title: "Spacious Family Getaway",
+    price: "$800/month",
+    location: "Suburbs",
+    city: "Hawassa",
+    size: "2 bedrooms",
+    image: "/house3.jpg",
+  },
+  {
+    id: 4,
+    title: "Charming Studio Flat",
+    price: "$450/month",
+    location: "Central",
+    city: "Adama",
+    size: "1 bedroom",
+    image: "/house4.jpg",
+  },
+];
 
-export default async function Home() {
-  const properties = await getProperties();
+export default function Home() {
+  const [properties, setProperties] = useState(initialProperties);
+
+  const handleSearch = (filters) => {
+    const filtered = initialProperties.filter((prop) => {
+      const priceNum = parseInt(
+        prop.price.replace("$", "").replace("/month", ""),
+        10
+      );
+      return (
+        (!filters.location ||
+          prop.location
+            .toLowerCase()
+            .includes(filters.location.toLowerCase())) &&
+        (!filters.city || prop.city === filters.city) &&
+        priceNum >= filters.price[0] &&
+        priceNum <= filters.price[1] &&
+        (!filters.size || prop.size === filters.size)
+      );
+    });
+    setProperties(filtered);
+  };
 
   return (
     <Box sx={{ minHeight: "100vh", bgcolor: "background.default" }}>
@@ -72,41 +93,7 @@ export default async function Home() {
           >
             Explore unique rentals in Ethiopia and beyond
           </Typography>
-
-          {/* Smaller Search Bar */}
-          <Paper
-            elevation={2}
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              borderRadius: "24px",
-              p: 0.5,
-              maxWidth: "450px", // Smaller width
-              mx: "auto",
-              boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
-            }}
-          >
-            <TextField
-              placeholder="Where are you going?"
-              variant="outlined"
-              size="small" // Smaller input
-              sx={{
-                flexGrow: 1,
-                "& .MuiOutlinedInput-root": {
-                  borderRadius: "24px 0 0 24px",
-                  "& fieldset": { border: "none" },
-                },
-              }}
-            />
-            <Button
-              variant="contained"
-              color="secondary" // Light purple
-              size="medium"
-              sx={{ borderRadius: "24px", px: 2, py: 1 }}
-            >
-              Search
-            </Button>
-          </Paper>
+          <SearchBar onSearch={handleSearch} />
         </Box>
 
         {/* Properties Section */}
@@ -124,6 +111,8 @@ export default async function Home() {
           ))}
         </Grid>
       </Container>
+
+      <Footer />
     </Box>
   );
 }
