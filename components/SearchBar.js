@@ -1,5 +1,5 @@
 // components/SearchBar.js
-"use client";
+
 import { useState } from "react";
 import {
   Paper,
@@ -21,18 +21,24 @@ import { useTheme } from "@mui/material/styles";
 import SearchIcon from "@mui/icons-material/Search";
 import CloseIcon from "@mui/icons-material/Close";
 
+import { usePropertyContext } from "../context/PropertyContext";
+
 export default function SearchBar({ onSearch }) {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm")); // Mobile breakpoint
   const [anchorEl, setAnchorEl] = useState(null);
   const [activeField, setActiveField] = useState(null);
   const [openDialog, setOpenDialog] = useState(false);
-  const [filters, setFilters] = useState({
-    location: "",
-    city: "",
-    price: [0, 2000],
-    size: "",
-  });
+  // const [filters, setFilters] = useState({
+  //   location: "",
+  //   city: "",
+  //   price: [0, 20000],
+  //   size: "",
+  // });
+
+  const { filters, setFilters, handleSearchMain } = usePropertyContext();
+
+  const [newFilterState, setNewFilterState] = useState(filters);
 
   const handleClick = (event, field) => {
     if (isMobile) {
@@ -50,11 +56,13 @@ export default function SearchBar({ onSearch }) {
   };
 
   const handleFilterChange = (key, value) => {
-    setFilters((prev) => ({ ...prev, [key]: value }));
+    // setFilters((prev) => ({ ...prev, [key]: value }));
+    setNewFilterState((prev) => ({ ...prev, [key]: value }));
   };
 
   const handleSearch = () => {
-    onSearch(filters);
+    //onSearch(filters);
+    handleSearchMain(newFilterState);
     handleClose();
   };
 
@@ -162,7 +170,7 @@ export default function SearchBar({ onSearch }) {
         >
           <SearchIcon sx={{ mr: 1, color: "text.secondary" }} />
           <Typography variant="body1" color="text.secondary">
-            Where are you going?
+            Where you want to live?
           </Typography>
         </Paper>
       )}
@@ -208,6 +216,7 @@ export default function SearchBar({ onSearch }) {
           {activeField === "price" && (
             <Box sx={{ px: 2 }}>
               <Typography gutterBottom>Price Range</Typography>
+
               <Slider
                 value={filters.price}
                 onChange={(e, newValue) =>
@@ -215,7 +224,7 @@ export default function SearchBar({ onSearch }) {
                 }
                 valueLabelDisplay="auto"
                 min={0}
-                max={2000}
+                max={50000}
                 step={50}
               />
             </Box>
@@ -287,7 +296,7 @@ export default function SearchBar({ onSearch }) {
                   }
                   valueLabelDisplay="auto"
                   min={0}
-                  max={2000}
+                  max={50000}
                   step={50}
                 />
               </Box>

@@ -1,6 +1,8 @@
 // app/page.js
 "use client"; // Make entire page client-side for simplicity
-import { useState } from "react";
+
+import { usePropertyContext } from "../context/PropertyContext";
+// import { useState } from "react";
 import { Typography, Container, Box, Grid } from "@mui/material";
 import Header from "../components/Header";
 import Footer from "@/components/Footer";
@@ -8,67 +10,12 @@ import SearchBar from "../components/SearchBar";
 import PropertyCard from "../components/PropertyCards";
 
 // Mock data (could be fetched server-side initially)
-const initialProperties = [
-  {
-    id: 1,
-    title: "Cozy Downtown Loft",
-    price: "$500/month",
-    location: "Downtown",
-    city: "Addis Ababa",
-    size: "1 bedroom",
-    image: "/house1.jpg",
-  },
-  {
-    id: 2,
-    title: "Modern Villa Retreat",
-    price: "$1200/month",
-    location: "Lakeside",
-    city: "Bahir Dar",
-    size: "3+ bedrooms",
-    image: "/house2.jpg",
-  },
-  {
-    id: 3,
-    title: "Spacious Family Getaway",
-    price: "$800/month",
-    location: "Suburbs",
-    city: "Hawassa",
-    size: "2 bedrooms",
-    image: "/house3.jpg",
-  },
-  {
-    id: 4,
-    title: "Charming Studio Flat",
-    price: "$450/month",
-    location: "Central",
-    city: "Adama",
-    size: "1 bedroom",
-    image: "/house4.jpg",
-  },
-];
+const initialProperties = []; // already replaced by context api-
 
 export default function Home() {
-  const [properties, setProperties] = useState(initialProperties);
-
-  const handleSearch = (filters) => {
-    const filtered = initialProperties.filter((prop) => {
-      const priceNum = parseInt(
-        prop.price.replace("$", "").replace("/month", ""),
-        10
-      );
-      return (
-        (!filters.location ||
-          prop.location
-            .toLowerCase()
-            .includes(filters.location.toLowerCase())) &&
-        (!filters.city || prop.city === filters.city) &&
-        priceNum >= filters.price[0] &&
-        priceNum <= filters.price[1] &&
-        (!filters.size || prop.size === filters.size)
-      );
-    });
-    setProperties(filtered);
-  };
+  const { properties, loading, handleSearch } = usePropertyContext();
+  //console.log(properties);
+  // there was handlesearch function moved to the context
 
   return (
     <Box sx={{ minHeight: "100vh", bgcolor: "background.default" }}>
