@@ -1,50 +1,18 @@
 "use client"; // Required for client-side features like useState/useEffect
 
-import { createContext, useContext, useState, useEffect } from "react";
-
+import {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  Component,
+} from "react";
+import { initialdata } from "../components/initialdata";
 // Create the context
 const PropertyContext = createContext();
 
 // Mock data
-const mockProperties = [
-  {
-    id: 1,
-    title: "Cozy Downtown Loft",
-    price: "$500/month",
-    location: "Downtown",
-    city: "Addis Ababa",
-    size: "1 bedroom",
-    image: "/house1.jpg",
-  },
-  {
-    id: 2,
-    title: "Modern Villa Retreat",
-    price: "$1200/month",
-    location: "Lakeside",
-    city: "Bahir Dar",
-    size: "3+ bedrooms",
-    image: "/house2.jpg",
-  },
-  {
-    id: 3,
-    title: "Spacious Family Getaway",
-    price: "$800/month",
-    location: "Suburbs",
-    city: "Hawassa",
-    size: "2 bedrooms",
-    image: "/house3.jpg",
-  },
-  {
-    id: 4,
-    title: "Charming Studio Flat",
-    price: "$450/month",
-    location: "Central",
-    city: "Adama",
-    size: "1 bedroom",
-    image: "/house4.jpg",
-  },
-];
-
+const mockProperties = initialdata;
 // Provider component
 export const PropertyProvider = ({ children }) => {
   const [properties, setProperties] = useState([]);
@@ -52,7 +20,7 @@ export const PropertyProvider = ({ children }) => {
   const [filters, setFilters] = useState({
     location: "",
     city: "",
-    price: [0, 50000], // Initialize price as an array with min/max
+    price: [0, 5000], // Initialize price as an array with min/max
     size: "",
   });
   const [newFilterState, setNewFilterState] = useState(filters);

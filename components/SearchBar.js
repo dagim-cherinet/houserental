@@ -16,6 +16,8 @@ import {
   DialogActions,
   useMediaQuery,
   IconButton,
+  InputLabel,
+  FormControl,
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import SearchIcon from "@mui/icons-material/Search";
@@ -62,14 +64,15 @@ export default function SearchBar({ onSearch }) {
   };
 
   const handleFilterChange = (key, value) => {
-    // setFilters((prev) => ({ ...prev, [key]: value }));
-    setNewFilterState((prev) => ({ ...prev, [key]: value }));
+    setFilters((prev) => ({ ...prev, [key]: value }));
+    //setNewFilterState((prev) => ({ ...prev, [key]: value })); will be update in the pagination part
   };
 
   const handleSearch = () => {
     //onSearch(filters);
     //console.log("clicked once");
-    handleSearchMain(newFilterState);
+    //handleSearchMain(newFilterState);
+    handleSearchMain(filters); // redendedt already filtered automatically by each input change
     handleClose();
   };
 
@@ -231,7 +234,7 @@ export default function SearchBar({ onSearch }) {
                 }
                 valueLabelDisplay="auto"
                 min={0}
-                max={50000}
+                max={5000}
                 step={50}
               />
             </Box>
@@ -303,7 +306,7 @@ export default function SearchBar({ onSearch }) {
                   }
                   valueLabelDisplay="auto"
                   min={0}
-                  max={50000}
+                  max={5000}
                   step={50}
                 />
               </Box>
