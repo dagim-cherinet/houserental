@@ -55,7 +55,7 @@ export const PropertyProvider = ({ children }) => {
     price: [0, 50000], // Initialize price as an array with min/max
     size: "",
   });
-
+  const [newFilterState, setNewFilterState] = useState(filters);
   // Fetch properties (mock for now)
   useEffect(() => {
     const fetchProperties = async () => {
@@ -102,6 +102,8 @@ export const PropertyProvider = ({ children }) => {
     handleSearchMain,
     filters,
     setFilters,
+    setNewFilterState,
+    newFilterState,
   };
 
   return (

@@ -36,9 +36,15 @@ export default function SearchBar({ onSearch }) {
   //   size: "",
   // });
 
-  const { filters, setFilters, handleSearchMain } = usePropertyContext();
+  const {
+    filters,
+    setFilters,
+    handleSearchMain,
+    setNewFilterState,
+    newFilterState,
+  } = usePropertyContext();
 
-  const [newFilterState, setNewFilterState] = useState(filters);
+  // const [newFilterState, setNewFilterState] = useState(filters);
 
   const handleClick = (event, field) => {
     if (isMobile) {
@@ -62,6 +68,7 @@ export default function SearchBar({ onSearch }) {
 
   const handleSearch = () => {
     //onSearch(filters);
+    //console.log("clicked once");
     handleSearchMain(newFilterState);
     handleClose();
   };
